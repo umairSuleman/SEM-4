@@ -17,7 +17,7 @@ void initTimer0(void){
 	//25000 clck @25Mhz = 1ms
 	LPC_TIM0->TCR = 0x02; //Reset timer
 }
-
+/*
 void delay(unsigned int millisec){
 	LPC_TIM0->TCR = 0x02; //Reset Timer
 	LPC_TIM0->TCR = 0x01; //Enable Timer
@@ -25,7 +25,7 @@ void delay(unsigned int millisec){
 	LPC_TIM0->TCR = 0x00; //Disable timer
 	
 }
-
+*/
 int main(){
     // Initialize the system and update the system core clock (usually required for LPC17xx setup)
     SystemInit();
@@ -53,15 +53,21 @@ int main(){
 				LPC_GPIO1->FIOPIN =	0 << 23;
 				LPC_GPIO0->FIOPIN = tohex[temp%10] << 4;
 				for(i=0; i<1000; i++);
+				
 				temp /= 10;
+				
 				LPC_GPIO1->FIOPIN =	1 << 23;
 				LPC_GPIO0->FIOPIN = tohex[temp%10] << 4;
 				for(i=0; i<1000; i++);
+				
 				temp /= 10;
+				
 				LPC_GPIO1->FIOPIN =	2 << 23;
 				LPC_GPIO0->FIOPIN = tohex[temp%10] << 4;
 				for(i=0; i<1000; i++);
+				
 				temp /= 10;
+				
 				LPC_GPIO1->FIOPIN =	3 << 23;
 				LPC_GPIO0->FIOPIN = tohex[temp%10] << 4;
 				for(i=0; i<1000; i++);
