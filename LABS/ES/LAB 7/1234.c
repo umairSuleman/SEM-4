@@ -8,7 +8,7 @@ unsigned char digits[4] = {4,3,2,1};
 
 unsigned int i = 0, j = 0;
 
-int main() {
+int main(void) {
     SystemInit();
     SystemCoreClockUpdate();
 
