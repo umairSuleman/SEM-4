@@ -30,5 +30,4 @@ int main(void) {
             for(j = 0; j < 100000; j++);  // random delay
         }
     }
-    return 0;
 }
