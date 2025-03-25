@@ -22,7 +22,9 @@ unsigned char hexTo7Seg[16] = {
 };
 
 unsigned int counter = 0x0000;  // 4-digit hex counter, start at 0000
-unsigned int countDown = 0;     // 0 = count up; 1 = count down
+unsigned int switchState = 1, flag=1;    // 0 = count up; 1 = count down
+
+unsigned int i,j;
 
 //---------------------------------------------------------
 // Initialize Timer0 for generating 1 ms ticks
@@ -37,16 +39,7 @@ void initTimer0(void) {
     LPC_TIM0->TCR = 0x02;              // Reset Timer0
 }
 
-//---------------------------------------------------------
-// Read the switch state (assumes active low on P2.10)
-//---------------------------------------------------------
-unsigned int readSwitch(void) {
-    return (LPC_GPIO2->FIOPIN & (1 << 10)) ? 1 : 0;
-}
 
-//---------------------------------------------------------
-// Main function
-//---------------------------------------------------------
 int main(void) {
     unsigned int temp;  // Used for digit extraction
 
@@ -61,24 +54,26 @@ int main(void) {
     // Configure GPIO1 pins 23 to 26 as outputs for digit selection.
     LPC_GPIO1->FIODIR |= (0xF << 23);
     // Configure GPIO2 pin 10 as input for the switch.
-    LPC_GPIO2->FIODIR &= ~(1 << 10);
-    // (Optional: configure pull-up resistors for P2.10 as needed.)
+	
+    LPC_PINCON->PINSEL4 &= 0xFFFFFFFC; //For Key
+    LPC_GPIO2->FIODIR &= 0xFFFFFFFE; //~0x00000001 
 
     while (1) {
         // Check switch state to determine counting direction.
         // Assume: switch pressed (logic 0) means count down; released (logic 1) means count up.
-        if (readSwitch() == 0) {
-            countDown = 1;
-        } else {
-            countDown = 0;
-        }
+        switchState = (LPC_GPIO2->FIOPIN) &1;
+				if (switchState == 0){
+					flag = !flag;
+				if (flag) counter = 0xFFFF;
+				else counter =0;
+				}
         
         // Reset and start Timer0 to measure a 1-second period.
         LPC_TIM0->TCR = 0x02;  // Reset Timer
         LPC_TIM0->TCR = 0x01;  // Start Timer
 
         // Continue multiplexing the display until 1 second has elapsed.
-        while (LPC_TIM0->TC < 1000) {
+        while (LPC_TIM0->TC < 100) {
             temp = counter;
 
             // Display digit 0 (least significant)
@@ -108,21 +103,16 @@ int main(void) {
         LPC_TIM0->TCR = 0x00;  // Stop Timer0 after 1 second period
 
         // Update the counter based on the counting direction.
-        if (countDown) {
-            // Count down; wrap from 0x0000 to 0xFFFF.
-            if (counter == 0)
-                counter = 0xFFFF;
-            else
-                counter--;
-        } else {
-            // Count up; wrap from 0xFFFF to 0x0000.
-            if (counter == 0xFFFF)
-                counter = 0;
-            else
-                counter++;
-        }
+				
+				if (flag)	
+					counter--;
+				else counter++;
+				if (counter == 0)
+					counter = 0xFFFF;
+				if (counter == 0xFFFF)
+					counter =0;
+				
     }
     
-    // The program never reaches here.
-    return 0;
+    // The program never reaches here.
 }
