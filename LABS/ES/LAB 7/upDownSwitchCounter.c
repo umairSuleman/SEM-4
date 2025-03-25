@@ -17,7 +17,7 @@ void initTimer0(void){
 	//25000 clck @25Mhz = 1ms
 	LPC_TIM0->TCR = 0x02; //Reset timer
 }
-/*
+
 void delay(unsigned int millisec){
 	LPC_TIM0->TCR = 0x02; //Reset Timer
 	LPC_TIM0->TCR = 0x01; //Enable Timer
@@ -25,7 +25,7 @@ void delay(unsigned int millisec){
 	LPC_TIM0->TCR = 0x00; //Disable timer
 	
 }
-*/
+
 int main(){
     // Initialize the system and update the system core clock (usually required for LPC17xx setup)
     SystemInit();
@@ -35,7 +35,7 @@ int main(){
 
     //Using CND for key => 7th pin is P2.0
     LPC_PINCON->PINSEL4 &= 0xFFFFFFFC; //For Key
-    LPC_GPIO2->FIODIR &= 0xFFFFFFFE //~0x00000001 
+    LPC_GPIO2->FIODIR &= 0xFFFFFFFE; //~0x00000001 
 	
     // Configure GPIO pins for the 7-segment displays
     // LPC_GPIO0 pins 0 to 7 are set as outputs to control the 7-segment display (8 bits)
@@ -45,6 +45,12 @@ int main(){
     LPC_GPIO1->FIODIR |= 0xF << 23; // Set bits 23-26 as output (4 bits for digit select) - Not sure why yet, mux => 23 and 24th bit only
 
 		while (1){
+			switchState = (LPC_GPIO2->FIOPIN) &1;
+			if (switchState == 0){
+				flag = !flag;
+				if (flag) counter = 9999;	//comment these lines if u want it to count from where u left off
+				else counter =0;		// this too
+			}
 			
 			LPC_TIM0->TCR = 0x02; //Reset Timer
 			LPC_TIM0->TCR = 0x01; //Enable Timer
@@ -74,17 +80,12 @@ int main(){
 			}
 			LPC_TIM0->TCR = 0x00; //Disable timer
 			
-			switchState = (LPC_GPIO2->FIOPIN >> 12) & 1;
-			if (switchState == 0){
-				flag = !flag;
-				if (flag) counter = 9999;
-				else counter = 0;
-			}
+			
 			if (flag)	
 				counter--;
 			else counter++;
 			if (counter == 0)
-				counter = 9999;
+				counter = 9999;
 
-		} 
+		} 
 }
