@@ -33,7 +33,8 @@ int main(void){
 void lcd_init(){
 
 	//Ports initialized as GPIO 
- 	LPC_PINCON->PINSEL1 &= 0xFC003FFF;                  //P0.23 to P0.28
+	
+	LPC_PINCON->PINSEL1 &= 0xFC003FFF;                  //P0.23 to P0.28
 	//Setting the directions as output 
  	LPC_GPIO0->FIODIR |= 0x0F<<23 | 1<<27 | 1<<28;      //23-26:D4-D7  27:RS  28:EN
  
@@ -47,18 +48,18 @@ void lcd_init(){
 	delay_lcd(30000);
 
 	lcd_comdata(0x28, 0);   //Function set  (0010 1111)(d7-d0)
-    delay_lcd(30000);
-
-    lcd_comdata(0x0c, 0);   //Display(D): on(1) cursor(C): off(0) == (0000 1100) (0000 1DCB) {B:Cursor Blink}
-    delay_lcd(800);
-
-    lcd_comdata(0x06, 0);   //Entry mode set increment(I/D==1) cursor right == (0000 0110) (0000 01 I/D S)
-    delay_lcd(800);
-
-    lcd_comdata(0x01, 0);   //Display clear (0000 0001)
-    delay_lcd(10000);
-
-    return;
+	delay_lcd(30000);
+	
+	lcd_comdata(0x0c, 0);   //Display(D): on(1) cursor(C): off(0) == (0000 1100) (0000 1DCB) {B:Cursor Blink}
+	delay_lcd(800);
+	
+	lcd_comdata(0x06, 0);   //Entry mode set increment(I/D==1) cursor right == (0000 0110) (0000 01 I/D S)
+	delay_lcd(800);
+	
+	lcd_comdata(0x01, 0);   //Display clear (0000 0001)
+	delay_lcd(10000);
+	
+	return;
 }
 
 void lcd_comdata(int temp1, int type){
