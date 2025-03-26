@@ -5,6 +5,9 @@ unsigned int LED={255, 126, 60, 24, 24, 60, 126, 255};
 unsigned int i,j;
 
 int main(void){
+  SystemInit();
+  SystemCoreClockUpdate();
+  
   LPC_PINCON->PINSEL0 &= 0xFF0000FF;
   LPC_GPIO0->FIODIR |= 0x0FF0;
 
