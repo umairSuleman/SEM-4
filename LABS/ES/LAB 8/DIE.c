@@ -15,7 +15,7 @@ int main(void){
     LPC_PINCON->PINSEL4 &= 0xFFFFFFFC;      //For Key
     LPC_GPIO2->FIODIR &= 0xFFFFFFFE;        //~0x00000001 
 
-    while(){
+    while(1){
         pressed=LPC_GPIO2->FIOPIN & 1;
 
         if(pressed){
