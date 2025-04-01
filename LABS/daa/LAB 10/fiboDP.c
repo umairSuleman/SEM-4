@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+//Uses DP
 int fibarr(int n) {
     if (n <= 1)
         return n;
@@ -14,6 +15,7 @@ int fibarr(int n) {
     return dp[n];
 }
 
+//More space efficient
 int fibNoArray(int n) {
     if (n <= 1)
         return n;
