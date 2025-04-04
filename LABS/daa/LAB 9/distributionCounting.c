@@ -28,9 +28,9 @@ void distributionCounting(int arr[], int n, int l, int u){
     }
 
     for(int i=n-1; i>=0; i--){
-        int j= arr[i]-l;
+        int j= arr[i]-l;        //obtains position
         S[D[j]-1]=arr[i];
-        D[j]--;
+        D[j]--;                  //decrement for next position
     }
 
     printf("Sorrted Array:");
