@@ -1,5 +1,21 @@
 #include <stdio.h>
 
+void findSubset(int n, int maxCap, int dp[n+1][maxCap+1], int p[], int w[]) {        //imp to declare indices first since VLA
+    int res = dp[n][maxCap];
+    int remainingCap = maxCap;
+    printf("Optimal subset:\n");
+
+    for (int i = n; i > 0 && res > 0; i--) {
+        if (res == dp[i-1][remainingCap]) {                                           //if value alr above then skip
+            continue;
+        } else {
+            printf("Item %d (profit: %d, weight: %d)\n", i, p[i-1], w[i-1]);           //else value must hbe included
+            res -= p[i-1];
+            remainingCap -= w[i-1];
+        }
+    }
+}
+
 // Function to return the maximum of two numbers
 int max(int a, int b) {
     return (a > b) ? a : b;
@@ -26,6 +42,15 @@ int knapsackDP(int p[], int w[], int maxCap, int n) {
             }
         }
     }
+
+    for(int i=0; i<=n; i++){
+        for(int j=0; j<=maxCap; j++){
+            printf("%d\t", dp[i][j]);
+        }
+        printf("\n");
+    }
+
+    findSubset(n, maxCap, dp, p, w);
 
     return dp[n][maxCap];  // Return the maximum profit
 }
