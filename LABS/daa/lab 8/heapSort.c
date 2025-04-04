@@ -3,25 +3,25 @@
 
 void bottomUpHeap(int arr[], int n) {
     for (int i = (n - 1) / 2; i >= 0; i--) {
-        int k = i;
-        int v = arr[k];
+        int p_pos = i;
+        int p_val = arr[p_pos];
         bool heap = false;
 
-        while (!heap && (2 * k + 1) < n) {
-            int j = 2 * k + 1;  // Left child
+        while (!heap && (2 * p_pos + 1) < n) {
+            int c_pos = 2 * p_pos + 1;  // Left child
 
-            if (j + 1 < n && arr[j] < arr[j + 1]) { // Right child exists and is greater
-                j++;
+            if (c_pos + 1 < n && arr[c_pos] < arr[c_pos + 1]) { // Right child exists and is greater
+                c_pos++;                //c_pos now holds larger child
             }
 
-            if (v >= arr[j]) {
+            if (p_val >= arr[c_pos]) {        //if parent > child then heap is true
                 heap = true;
             } else {
-                arr[k] = arr[j];
-                k = j;
+                arr[p_pos] = arr[c_pos];            //else move child to parent position
+                p_pos = c_pos;                       //save parents new position in childs old position
             }
         }
-        arr[k] = v;
+        arr[p_pos] = p_val;                        //move parent to its new position
     }
 }
 
