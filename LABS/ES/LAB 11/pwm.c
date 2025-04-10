@@ -11,7 +11,7 @@ void delay(unsigned int r1) {
 }
 
 void initPWM(void) {
-    LPC_PINCON->PINSEL3 |= 0x8000; //Select PWM1.4 output for Pin1.23, function 2
+    LPC_PINCON->PINSEL3 |= 0x8000; //Select PWM1.4 output for Pin1.23, function 2 (10 00 0000 0000 0000= 8000)
     LPC_PWM1->PCR = 0x1000; //enable PWM1.4, by default it is single Edged 
     LPC_PWM1->PR = 0; 
     LPC_PWM1->MR0 = 30000; //period=10ms if pclk=cclk/4
